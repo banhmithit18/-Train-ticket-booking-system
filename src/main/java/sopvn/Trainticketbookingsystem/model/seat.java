@@ -1,13 +1,21 @@
 package sopvn.Trainticketbookingsystem.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "seat")
@@ -15,84 +23,39 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class seat {
 	private int id;
 	private String name;
-	private int trainid;
-	private int routineid;
-	private int row;
-	private int side;
-	private int seattypeid;
-	private double price;
+	private int carriageid;
+	private Integer row;
+	private Integer side;
+	private int seattype;
+	private float price;
 	private Boolean active;
 	
-
-	@Column(name = "active", nullable = true)
-	public Boolean getActive() {
-		return active;
+	private seattype seat;
+	private carriage carriage;
+	
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "seattypeid", referencedColumnName = "id", insertable = false, updatable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	public seattype getSeat() {
+		return seat;
 	}
 
-	public void setActive(Boolean active) {
-		this.active = active;
+	public void setSeat(seattype seat) {
+		this.seat = seat;
 	}
 
-
-	@Column(name = "price", nullable = true)
-	public double getPrice() {
-		return price;
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "carriageid", referencedColumnName = "id", insertable = false, updatable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	public carriage getCarriage() {
+		return carriage;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public void setCarriage(carriage carriage) {
+		this.carriage = carriage;
 	}
-
-
-	@Column(name = "seattypeid", nullable = true)
-	public int getSeatTypeId() {
-		return seattypeid;
-	}
-
-	public void setSeatTypeId(int seattypeid) {
-		this.seattypeid = seattypeid;
-	}
-
-
-	@Column(name = "side", nullable = true)
-	public int getSide() {
-		return side;
-	}
-
-	public void setSide(int side) {
-		this.side = side;
-	}
-
-
-	@Column(name = "row", nullable = true)
-	public int getRow() {
-		return row;
-	}
-
-	public void setRow(int row) {
-		this.row = row;
-	}
-
-
-	@Column(name = "routineid", nullable = true)
-	public int getRoutineId() {
-		return routineid;
-	}
-
-	public void setRoutineId(int routineid) {
-		this.routineid = routineid;
-	}
-
-
-	@Column(name = "trainid", nullable = true)
-	public int getTrainId() {
-		return trainid;
-	}
-
-	public void setTrainId(int trainid) {
-		this.trainid = trainid;
-	}
-
 
 	@Column(name = "name", nullable = true)
 	public String getName() {
@@ -103,9 +66,62 @@ public class seat {
 		this.name = name;
 	}
 
+	@Column(name = "carriageid", nullable = true)
+	public int getCarriageid() {
+		return carriageid;
+	}
+
+	public void setCarriageid(int carriageid) {
+		this.carriageid = carriageid;
+	}
+
+	@Column(name = "row", nullable = true)
+	public Integer getRow() {
+		return row;
+	}
+
+	public void setRow(Integer row) {
+		this.row = row;
+	}
+
+	@Column(name = "side", nullable = true)
+	public Integer getSide() {
+		return side;
+	}
+
+	public void setSide(Integer side) {
+		this.side = side;
+	}
+
+	@Column(name = "seattypeid", nullable = true)
+	public int getSeattype() {
+		return seattype;
+	}
+
+	public void setSeattype(int seattype) {
+		this.seattype = seattype;
+	}
+
+	@Column(name = "price", nullable = true)
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
+	@Column(name = "active", nullable = true)
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
 
 	@Id
-	@GeneratedValue(strategy =GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
@@ -115,4 +131,3 @@ public class seat {
 	}
 
 }
-

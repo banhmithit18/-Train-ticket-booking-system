@@ -1,10 +1,14 @@
 package sopvn.Trainticketbookingsystem.AdminController;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import sopvn.Trainticketbookingsystem.model.station;
 import sopvn.Trainticketbookingsystem.repository.stationRepository;
@@ -12,46 +16,73 @@ import sopvn.Trainticketbookingsystem.ulti.Mappings;
 
 @Controller
 public class Station {
-	@Autowired stationRepository stations;
-	
-	//create
-	@RequestMapping(Mappings.ADMIN_STATION_CREATE)
-	public String CreateStation(station s)
-	{
-		if (s.getActive() == null) {
-			s.setActive(false);
+	@Autowired
+	stationRepository stations;
+
+	// create with AJAX
+	@RequestMapping(value = Mappings.ADMIN_STATION_CREATE, method = RequestMethod.POST, consumes = {
+			"application/json" })
+	public @ResponseBody station CreateStation(@RequestBody station s) throws Exception {
+		if (!CheckStationName(s)) {
+			stations.save(s);
+			station stationCreated = stations.findByName(s.getName());
+			return stationCreated;
+		} else {
+			return null;
 		}
-		stations.save(s);
-		return "redirect:"+Mappings.ADMIN_MANAGEMENT; 
 	}
-	//enable
-	@RequestMapping(Mappings.ADMIN_STATION_ENABLE)
-	public String EnableStation(@RequestParam int id)
-	{
+
+	// check if name already created
+	public Boolean CheckStationName(station s) {
+		if (stations.findByName(s.getName()) != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	// enable with AJAX
+
+	@RequestMapping(value = Mappings.ADMIN_STATION_ENABLE, method = RequestMethod.POST, consumes = {"application/json"})
+	@ResponseBody
+	public station EnableStation(@RequestBody int id) {
 		station s = stations.findById(id);
 		s.setActive(true);
-		stations.save(s);
-		return "redirect:"+Mappings.ADMIN_MANAGEMENT; 
-		
+		try {
+			stations.save(s);
+		} catch (Exception e) {
+			return null;
+		}
+		return s;
 	}
-	//disable
-	@RequestMapping(Mappings.ADMIN_STATION_DISABLE)
-	public String DisableStation(@RequestParam int id)
-	{
+
+	// disable
+	@RequestMapping(value = Mappings.ADMIN_STATION_DISABLE, method = RequestMethod.POST, consumes = {"application/json"})
+	@ResponseBody
+	public station DisableStation(@RequestBody int id) {
 		station s = stations.findById(id);
 		s.setActive(false);
-		stations.save(s);
-		return "redirect:"+Mappings.ADMIN_MANAGEMENT; 
-	}
-	//delete
-	@RequestMapping(Mappings.ADMIN_STATION_DELETE)
-	public String DeleteStation(@RequestParam int id)
-	{
 		try {
+			stations.save(s);
+		} catch (Exception e) {
+			return null;
+		}
+
+		return s;
+	}
+
+	// delete
+	@RequestMapping(value = Mappings.ADMIN_STATION_DELETE, method = RequestMethod.POST, consumes = {"application/json"})
+	@ResponseBody
+	public station DeleteStation(@RequestBody String idInString) {
+		int id = Integer.parseInt(idInString);
+		station stationDeleted = stations.findById(id);
+		try {
+			
 			stations.deleteById(id);
 		} catch (ExpressionException e) {
-			return "redirect:"+Mappings.ADMIN_MANAGEMENT+"?deletefailedstation=true"; 
+			return null;
 		}
-		return "redirect:"+Mappings.ADMIN_MANAGEMENT; 
+		return stationDeleted;
 	}
+
 }

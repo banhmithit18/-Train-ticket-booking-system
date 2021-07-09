@@ -1,13 +1,12 @@
 package sopvn.Trainticketbookingsystem.AdminController;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import sopvn.Trainticketbookingsystem.model.train;
 import sopvn.Trainticketbookingsystem.repository.trainRepository;
 import sopvn.Trainticketbookingsystem.ulti.Mappings;
@@ -16,39 +15,68 @@ import sopvn.Trainticketbookingsystem.ulti.Mappings;
 public class Train {
 	@Autowired
 	trainRepository trains;
-    //create
-	@RequestMapping(value = Mappings.ADMIN_TRAIN_CREATE, method = RequestMethod.POST)
-	public String CreateTrain(train train) {
-		if (train.getActive() == null) {
-			train.setActive(false);
+
+	///check if name or serial number already exits
+	public Boolean CheckTrainNameAndSerialNumber(train t) {
+		if (trains.findByName(t.getName()) != null || trains.findBySerialnumber(t.getSerialnumber()) !=null) {
+			return true;
+		} else {
+			return false;
 		}
-		trains.save(train);
-		return "redirect:" + Mappings.ADMIN_MANAGEMENT;
 	}
-	//enable
-	@RequestMapping(Mappings.ADMIN_TRAIN_ENABLE)
-	public String EnableTrain(@RequestParam int id) {
+    ///create
+	@RequestMapping(value = Mappings.ADMIN_TRAIN_CREATE, method = RequestMethod.POST, consumes = {"application/json" })
+	public @ResponseBody train CreateTrain(@RequestBody train t) throws Exception {
+		if (!CheckTrainNameAndSerialNumber(t)) {
+			trains.save(t);
+			train trainCreated = trains.findByName(t.getName());
+			return trainCreated;
+		} else {
+			return null;
+		}
+	}
+
+	// enable with AJAX
+	@RequestMapping(value = Mappings.ADMIN_TRAIN_ENABLE, method = RequestMethod.POST, consumes = {"application/json"})
+	@ResponseBody
+	public train EnableTrain(@RequestBody int id) {
 		train t = trains.findById(id);
 		t.setActive(true);
-		trains.save(t);
-		return "redirect:" + Mappings.ADMIN_MANAGEMENT;
+		try {
+			trains.save(t);
+		} catch (Exception e) {
+			return null;
+		}
+		return t;
 	}
-    //disable
-	@RequestMapping(Mappings.ADMIN_TRAIN_DISABLE)
-	public String DisableTrain(@RequestParam int id) {
+
+	// disable
+	@RequestMapping(value = Mappings.ADMIN_TRAIN_DISABLE, method = RequestMethod.POST, consumes = {"application/json"})
+	@ResponseBody
+	public train DisableTrain(@RequestBody int id) {
 		train t = trains.findById(id);
 		t.setActive(false);
-		trains.save(t);
-		return "redirect:" + Mappings.ADMIN_MANAGEMENT;
-	}
-	//delete
-	@RequestMapping(Mappings.ADMIN_TRAIN_DELETE)
-	public String DeleteTrain(@RequestParam int id) {
 		try {
-			trains.deleteById(id);
+			trains.save(t);
 		} catch (Exception e) {
-			return "redirect:" + Mappings.ADMIN_MANAGEMENT + "?deletefailed=true";
+			return null;
 		}
-		return "redirect:" + Mappings.ADMIN_MANAGEMENT;
+
+		return t;
+	}
+
+	// delete
+	@RequestMapping(value = Mappings.ADMIN_TRAIN_DELETE, method = RequestMethod.POST, consumes = {"application/json"})
+	@ResponseBody
+	public train DeleteTrain(@RequestBody String idInString) {
+		int id = Integer.parseInt(idInString);
+		train trainDeleted = trains.findById(id);
+		try {
+			
+			trains.deleteById(id);
+		} catch (ExpressionException e) {
+			return null;
+		}
+		return trainDeleted;
 	}
 }
