@@ -46,6 +46,8 @@ $(document).ready(function() {
 					$('#' + data.id + ' .stationDelete').click(DeleteStation);
 					$('#' + data.id + ' .stationEnable').click(EnableStation);
 					$('#' + data.id + ' .stationDisable').click(DisableStation);
+					//set value
+					$("#stationName").val('');
 				}
 			},
 			error: function(e) {

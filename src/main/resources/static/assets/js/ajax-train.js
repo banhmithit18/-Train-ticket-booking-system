@@ -46,6 +46,8 @@ $(document).ready(function() {
 					$('#t' + data.id + ' .trainDelete').click(DeleteTrain);
 					$('#t' + data.id + ' .trainEnable').click(EnableTrain);
 					$('#t' + data.id + ' .trainDisable').click(DisableTrain);
+					//set value
+					$("#trainName").val('');
 				}
 			},
 			error: function(e) {

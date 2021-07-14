@@ -1,23 +1,37 @@
 package sopvn.Trainticketbookingsystem.AdminController;
 
-
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import sopvn.Trainticketbookingsystem.model.carriage;
 import sopvn.Trainticketbookingsystem.model.station;
+import sopvn.Trainticketbookingsystem.repository.carriageRepository;
 import sopvn.Trainticketbookingsystem.repository.stationRepository;
 import sopvn.Trainticketbookingsystem.ulti.Mappings;
+import sopvn.Trainticketbookingsystem.ulti.ViewNames;
 
 @Controller
 public class Station {
 	@Autowired
 	stationRepository stations;
+	
+
+	@RequestMapping(Mappings.ADMIN_STATION_MANAGEMENT)
+	public String Index(Model model) {
+		// show station list
+		List<station> stationList = stations.findAll();
+		model.addAttribute("stations", stationList);
+		
+		return ViewNames.ADMIN_STATION_MANAGEMENT;
+	}
 
 	// create with AJAX
 	@RequestMapping(value = Mappings.ADMIN_STATION_CREATE, method = RequestMethod.POST, consumes = {
@@ -42,7 +56,8 @@ public class Station {
 	}
 	// enable with AJAX
 
-	@RequestMapping(value = Mappings.ADMIN_STATION_ENABLE, method = RequestMethod.POST, consumes = {"application/json"})
+	@RequestMapping(value = Mappings.ADMIN_STATION_ENABLE, method = RequestMethod.POST, consumes = {
+			"application/json" })
 	@ResponseBody
 	public station EnableStation(@RequestBody int id) {
 		station s = stations.findById(id);
@@ -56,7 +71,8 @@ public class Station {
 	}
 
 	// disable
-	@RequestMapping(value = Mappings.ADMIN_STATION_DISABLE, method = RequestMethod.POST, consumes = {"application/json"})
+	@RequestMapping(value = Mappings.ADMIN_STATION_DISABLE, method = RequestMethod.POST, consumes = {
+			"application/json" })
 	@ResponseBody
 	public station DisableStation(@RequestBody int id) {
 		station s = stations.findById(id);
@@ -71,13 +87,14 @@ public class Station {
 	}
 
 	// delete
-	@RequestMapping(value = Mappings.ADMIN_STATION_DELETE, method = RequestMethod.POST, consumes = {"application/json"})
+	@RequestMapping(value = Mappings.ADMIN_STATION_DELETE, method = RequestMethod.POST, consumes = {
+			"application/json" })
 	@ResponseBody
 	public station DeleteStation(@RequestBody String idInString) {
 		int id = Integer.parseInt(idInString);
 		station stationDeleted = stations.findById(id);
 		try {
-			
+
 			stations.deleteById(id);
 		} catch (ExpressionException e) {
 			return null;

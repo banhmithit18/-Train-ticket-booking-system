@@ -7,12 +7,14 @@ public final class Mappings {
 	public static final String ADMIN_REPORT ="/ReportPage";
 	public static final String ADMIN_MANAGEMENT ="/Management";
 	//train
+	public static final String ADMIN_TRAIN_MANAGEMEN ="/TrainManagement";
 	public static final String ADMIN_TRAIN_CREATE = "/TrainCreate";
 	public static final String ADMIN_TRAIN_ENABLE ="/TrainEnable";
 	public static final String ADMIN_TRAIN_DISABLE ="/TrainDisable";
 	public static final String ADMIN_TRAIN_DELETE ="/TrainDelete";
 
 	//station
+	public static final String ADMIN_STATION_MANAGEMENT ="/StationManagement";
 	public static final String ADMIN_STATION_CREATE = "/StationCreate";
 	public static final String ADMIN_STATION_ENABLE = "/StationEnable";
 	public static final String ADMIN_STATION_DISABLE ="/StationDisable";
@@ -37,6 +39,7 @@ public final class Mappings {
 	public static final String ADMIN_ROUTINE_DISABLE ="/RoutineDisable";
 	
 	//schedule
+	public static final String ADMIN_SCHEDULE_MANAGEMENT="/ScheduleManagement";
 	public static final String ADMIN_SCHEDULE_CREATE ="/ScheduleCreate";
 	public static final String ADMIN_SCHEDULE_ENABLE ="/ScheduleEnable";
 	public static final String ADMIN_SCHEDULE_DISABLE ="/ScheduleDisable";
@@ -48,6 +51,7 @@ public final class Mappings {
 	public static final String ADMIN_CARRIAGE_DISABLE ="/CarriageDisable";
     
 	//seat
+	public static final String ADMIN_SEAT_MANAGEMENT ="SeatManagement";
 	public static final String ADMIN_SEAT_EDIT ="/SeatEdit";
 	public static final String ADMIN_SEAT_DELETE ="/SeatDelete";
 	public static final String ADMIN_SEAT_ENABLE ="/SeatEnable";

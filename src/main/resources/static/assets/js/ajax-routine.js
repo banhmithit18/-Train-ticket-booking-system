@@ -67,6 +67,9 @@ $(document).ready(function() {
 					$('#r' + data.id + ' .routineDelete').click(DeleteRoutine);
 					$('#r' + data.id + ' .routineEnable').click(EnableRoutine);
 					$('#r' + data.id + ' .routineDisable').click(DisableRoutine);
+					///set value
+					 $("#routineName").val('');
+					 $("#routineDistance").val();
 				}
 			},
 			error: function(e) {

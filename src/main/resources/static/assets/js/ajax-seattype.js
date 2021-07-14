@@ -46,6 +46,9 @@ $(document).ready(function() {
 					$('#st' + data.id + ' .seattypeDelete').click(DeleteSeatType);
 					$('#st' + data.id + ' .seattypeEnable').click(EnableSeatType);
 					$('#st' + data.id + ' .seattypeDisable').click(DisableSeatType);
+					//set value
+					$("#seattypeName").val('');
+					$("#seattypeDescription").val('');
 				}
 			},
 			error: function(e) {

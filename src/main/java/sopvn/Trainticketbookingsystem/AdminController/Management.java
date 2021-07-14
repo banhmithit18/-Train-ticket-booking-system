@@ -23,15 +23,8 @@ public class Management {
 	@Autowired seatRepository seats;
 	@RequestMapping(Mappings.ADMIN_MANAGEMENT)
 	public String Index(Model model) {
-		//show train list
-		List<train> trainList = trains.findAll();
-		model.addAttribute("trains",trainList);
-		//show station list
-		List<station> stationList = stations.findAll();
-		model.addAttribute("stations",stationList);
-		//show seat type list
-		List<seattype> seattypeList = seattypes.findAll();
-		model.addAttribute("seattypes",seattypeList);
+		
+		
         //show station,train with active true;
 		List<station> routineStationList = stations.findByActiveTrue();
 		List<train> routineTrainList = trains.findByActiveTrue();
@@ -46,16 +39,7 @@ public class Management {
 		//show schedule list
 		List<schedule> scheduleList = schedules.findAll();
 		model.addAttribute("schedules",scheduleList);
-		//show carriage list
-		List<carriage> carriageList = carriages.findAll();
-		model.addAttribute("carriages",carriageList);
-		//show seat list
-		List<carriage> seatCarriage = carriages.findByActiveTrue();
-		model.addAttribute("seatCarriages",seatCarriage);
-		List<seattype> seatSeatType = seattypes.findByActiveTrue();
-		model.addAttribute("seatSeatTypes",seatSeatType);
-		List<seat> seatList = seats.findAll();
-		model.addAttribute("seats",seatList);
+
 	
 
 		return ViewNames.ADMIN_MANAGEMENT;

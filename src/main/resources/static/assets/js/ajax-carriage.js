@@ -50,6 +50,10 @@ $(document).ready(function() {
 					$('#c' + data.id + ' .carriageDelete').click(DeleteCarriage);
 					$('#c' + data.id + ' .carriageEnable').click(EnableCarriage);
 					$('#c' + data.id + ' .carriageDisable').click(DisableCarriage);
+					//set value 
+					$("#carriageName").val('');
+					$("#carriageTrain").val('');
+					$("#carriageSeatAmount").val('');
 				}
 			},
 			error: function(e) {
@@ -189,7 +193,7 @@ $(document).ready(function() {
 	}
 	//function enable for dynamic button
 	function EnableCarriage() {
-			var idWithString = this.id;
+		var idWithString = this.id;
 		//substring to get the id only
 		var id = idWithString.substr(1);
 		$.ajax({
@@ -224,7 +228,7 @@ $(document).ready(function() {
 	}
 	//function disable for dynamic button
 	function DisableCarriage() {
-	var idWithString = this.id;
+		var idWithString = this.id;
 		//substring to get the id only
 		var id = idWithString.substr(1);
 		$.ajax({
